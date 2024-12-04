@@ -1,4 +1,5 @@
 const axios = require('axios');
+const ExcludedRecipes = require('../models/ExcludedRecipes');
 
 exports.getRecipes = async (req, res) => {
     const { userId } = req.params;
@@ -19,5 +20,28 @@ exports.getRecipes = async (req, res) => {
         res.status(200).json(recipes);
     } catch (error) {
         res.status(500).json({ error: "Failed to fetch recipes." });
+    }
+};
+
+exports.excludeRecipe = async (req, res) => {
+    const { userId, recipeId } = req.body;
+
+    if (!userId || !recipeId) {
+        return res.status(400).json({ error: "Missing required parameters." });
+    }
+
+    try {
+        const excludedRecipes = await ExcludedRecipes.findOne({ userId });
+
+        if (excludedRecipes) {
+            excludedRecipes.recipeIds.push(recipeId);
+            await excludedRecipes.save();
+        } else {
+            await ExcludedRecipes.create({ userId, recipeIds: [recipeId] });
+        }
+
+        res.status(200).json({ message: "Recipe excluded." });
+    } catch (error) {
+        res.status(500).json({ error: "Failed to exclude recipe." });
     }
 };
