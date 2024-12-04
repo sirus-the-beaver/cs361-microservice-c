@@ -15,7 +15,7 @@ exports.getRecipes = async (req, res) => {
 
         const recipesResponse = await axios.get('https://api.spoonacular.com/recipes/complexSearch', { params: queryParams });
 
-        const recipes = recipesResponse.data.recipes;
+        const recipes = recipesResponse.data.results;
         res.status(200).json(recipes);
     } catch (error) {
         res.status(500).json({ error: "Failed to fetch recipes." });
