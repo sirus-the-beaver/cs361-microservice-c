@@ -5,6 +5,8 @@ exports.getRecipes = async (req, res) => {
     const { userId } = req.params;
 
     try {
+        const exclusions = await ExcludedRecipes.findOne({ userId });
+        const excludedRecipeIds = exclusions.recipeIds;
         const preferencesResponse = await axios.get(`http://localhost:5007/preferences/${userId}`);
         const { dietaryRestrictions, allergies } = preferencesResponse.data;
 
@@ -16,7 +18,8 @@ exports.getRecipes = async (req, res) => {
 
         const recipesResponse = await axios.get('https://api.spoonacular.com/recipes/complexSearch', { params: queryParams });
 
-        const recipes = recipesResponse.data.results;
+        const recipes = recipesResponse.data.results.filter(recipe => !excludedRecipeIds.includes(recipe.id.toString()));
+
         res.status(200).json(recipes);
     } catch (error) {
         res.status(500).json({ error: "Failed to fetch recipes." });
