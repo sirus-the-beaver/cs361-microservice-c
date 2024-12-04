@@ -9,7 +9,7 @@ dotenv.config();
 app.use(cors());
 app.use(express.json());
 
-app.use('/recipes', recipeRoutes);
+app.use('/recipes/:userId', recipeRoutes);
 
 app.listen(process.env.PORT, () => {
     console.log(`Server running on port ${process.env.PORT}`);
