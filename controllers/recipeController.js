@@ -48,3 +48,14 @@ exports.excludeRecipe = async (req, res) => {
         res.status(500).json({ error: "Failed to exclude recipe." });
     }
 };
+
+exports.getExcludedRecipes = async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const exclusions = await ExcludedRecipes.findOne({ userId });
+        res.status(200).json(exclusions.recipeIds);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to fetch excluded recipes." });
+    }
+};
