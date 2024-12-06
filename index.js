@@ -3,6 +3,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const recipeRoutes = require('./routes/recipeRoutes');
 const mongoose = require('mongoose');
+const authMiddleware = require('./middleware/authMiddleware');
 
 const app = express();
 
@@ -14,6 +15,7 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
     .then(() => console.log('Connected to MongoDB'))
     .catch(error => console.log(error));
 
+app.use(authMiddleware);
 app.use(recipeRoutes);
 
 app.listen(process.env.PORT, () => {
