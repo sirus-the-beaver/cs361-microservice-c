@@ -2,12 +2,12 @@ const axios = require('axios');
 const ExcludedRecipes = require('../models/ExcludedRecipes');
 
 exports.getRecipes = async (req, res) => {
-    const { userId } = req.params;
+    const userId = req.params.userId;
 
     try {
         const exclusions = await ExcludedRecipes.findOne({ userId });
-        const excludedRecipeIds = exclusions.recipeIds;
-        const preferencesResponse = await axios.get(`http://localhost:5007/preferences/${userId}`);
+        const excludedRecipeIds = exclusions ? exclusions.recipeIds : [];
+        const preferencesResponse = await axios.get(`https://dishfindr-microservice-b-0d2b598a2033.herokuapp.com/${userId}`);
         const { dietaryRestrictions, allergies } = preferencesResponse.data;
 
         const queryParams = {

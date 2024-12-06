@@ -7,7 +7,7 @@ const excludedRecipeSchema = new mongoose.Schema({
         unique: true
     },
     recipeIds: {
-        type: [Number],
+        type: [String],
         default: []
     },
 });
