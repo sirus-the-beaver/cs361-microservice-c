@@ -7,7 +7,7 @@ exports.getRecipes = async (req, res) => {
     try {
         const exclusions = await ExcludedRecipes.findOne({ userId });
         const excludedRecipeIds = exclusions ? exclusions.recipeIds : [];
-        const preferencesResponse = await axios.get(`https://dishfindr-microservice-b-0d2b598a2033.herokuapp.com/${userId}`);
+        const preferencesResponse = await axios.get(`https://dishfindr-microservice-b-0d2b598a2033.herokuapp.com/preferences/${userId}`);
         const { dietaryRestrictions, allergies } = preferencesResponse.data;
 
         const queryParams = {
@@ -16,7 +16,10 @@ exports.getRecipes = async (req, res) => {
             intolerances: allergies.join(',') || 'none',
         };
 
-        const recipesResponse = await axios.get('https://api.spoonacular.com/recipes/complexSearch', { params: queryParams });
+        const recipesResponse = await axios.get('https://api.spoonacular.com/recipes/complexSearch', 
+        { 
+            params: queryParams
+        });
 
         const recipes = recipesResponse.data.results.filter(recipe => !excludedRecipeIds.includes(recipe.id.toString()));
 
