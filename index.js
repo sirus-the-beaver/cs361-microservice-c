@@ -9,7 +9,7 @@ const app = express();
 
 dotenv.config();
 
-const allowedOrigins = ['https://dishfindr-4d3c3b6f3b94.herokuapp.com/', 'https://dishfindr-microservice-b-0d2b598a2033.herokuapp.com/'];
+const allowedOrigins = ['https://dishfindr-4d3c3b6f3b94.herokuapp.com', 'https://dishfindr-microservice-b-0d2b598a2033.herokuapp.com'];
 app.use(cors(
     {
         origin: function (origin, callback) {
